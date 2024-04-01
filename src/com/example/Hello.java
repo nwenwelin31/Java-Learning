@@ -17,22 +17,47 @@ public class Hello {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		String url = "jdbc:mysql://localhost:3306/student";
-		String username = "root";
-		String password = "";
+		Database db = new Database();
 		try {
-			Connection conn = DriverManager.getConnection(url,username,password);
-			System.out.println("connected");
-			
-			String sql = "insert into student(course,fee,studentname) values ('Java',120000,'Nwe Nwe')";
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-			System.out.println("insert successfully");
+			db.connect();
+			System.out.println("connect db");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("cannot connect to database");
+			System.out.println("cannot connect db");
 			e.printStackTrace();
-		}		
+		}
+		
+		//insert data into table
+		//db.save("C#",12000,"Khaing Khaing");
+		
+		try {
+			// select data from table
+			List<Student> list = db.getStudents();
+			for(Student std:list) {
+				System.out.println(std.getId()+":"+std.getStudentname()+":"+std.getCourse()+":"+std.getFee());
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//
+		try {
+			db.getStudentById(3);
+			System.out.println("get Id");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			db.disconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("cannot close connection");
+			e.printStackTrace();
+		}
 		
 		Collection<Integer> num = new ArrayList();
 		System.out.println("Before:"+num.size());
